@@ -1,9 +1,15 @@
 import mongoose from "mongoose";
-
+import dotenv from 'dotenv'
+dotenv.config()
 
 
 export const connectDB=()=>{
-    mongoose.connect("mongodb://localhost:27017/B2B").then(()=>{
+    const urls=process.env.MONGOURL
+    if (!urls) {
+        throw new Error("MONGOURL is not defined in environment variables");
+      }
+    mongoose.connect(urls).then(()=>{
+      
         console.log("data base connected")
         
     }).catch((error)=>{
