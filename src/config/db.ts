@@ -4,11 +4,12 @@ dotenv.config()
 
 
 export const connectDB=()=>{
-    const urls=process.env.MONGOURL
-    if (!urls) {
+    console.log(process.env.MONGOURL)
+    const url=process.env.MONGOURL
+    if (!url) {
         throw new Error("MONGOURL is not defined in environment variables");
       }
-    mongoose.connect(urls).then(()=>{
+    mongoose.connect(url).then(()=>{
       
         console.log("data base connected")
         
