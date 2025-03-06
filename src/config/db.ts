@@ -4,6 +4,7 @@ dotenv.config()
 
 
 export const connectDB=()=>{
+    console.log(process.env.MONGOURL)
     const url=process.env.MONGOURL
     if (!url) {
         throw new Error("MONGOURL is not defined in environment variables");
