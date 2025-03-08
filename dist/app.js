@@ -9,5 +9,6 @@ const db_1 = require("./config/db");
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
+app.use("api/wholesaler");
 (0, db_1.connectDB)();
 exports.default = app;
