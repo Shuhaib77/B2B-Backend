@@ -49,7 +49,6 @@ const userSchema = new mongoose_1.Schema({
     password: {
         type: String,
         required: true,
-        minlength: 6,
     },
     role: {
         type: String,
@@ -90,5 +89,9 @@ const userSchema = new mongoose_1.Schema({
             stockQuantity: Number,
         }
     ],
+    isDeleted: {
+        type: Boolean,
+        default: false,
+    }
 }, { timestamps: true });
 exports.default = mongoose_1.default.model('User', userSchema);

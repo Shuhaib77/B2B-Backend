@@ -8,37 +8,93 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addProducts = void 0;
-const Products_1 = __importDefault(require("../models/Products"));
+exports.deleteProduct = exports.getProductById = exports.getProduct = exports.updateProduct = exports.addProducts = void 0;
+const productService_1 = require("../service/productService");
 const addProducts = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const product = req.body;
+    const { name, description, price, category, stockQuantity, listedBy, listedByRole, wholesalePrice, minOrderQuantity, } = req.body;
     try {
-        if (!product) {
+        if (!name || !description || !price || !category || !stockQuantity || !listedBy || !listedByRole) {
             res.status(403).json({ message: 'validation error on vehicle' });
             return;
         }
+        if (!["seller", "wholesaler"].includes(listedByRole)) {
+            res.status(400).json({ message: "Invalid listedByRole. Must be 'seller' or 'wholesaler'" });
+            return;
+        }
         const images = req.body.cloudinaryImageUrls || [];
-        const newProduct = new Products_1.default({
-            name: product.name,
-            description: product.description,
-            price: product.price,
-            category: product.category,
-            stockQuantity: product.stockQuantity,
-            listedBy: product.listedBy,
-            listedByRole: product.listedByRole,
-            images: images,
-            wholesalePrice: product.wholesalePrice,
-            minOrderQuantity: product.minOrderQuantity,
-        });
-        yield newProduct.save();
+        const result = yield (0, productService_1.addProductsService)(name, description, price, category, stockQuantity, images, listedBy, listedByRole, wholesalePrice, minOrderQuantity);
+        if (!result) {
+            res.status(400).json({ message: "production creation failed " });
+        }
         res.status(201).json({ message: 'product added successfully' });
     }
     catch (error) {
-        res.status(500).json({ message: 'internal server error' });
+        res.status(500).json({ message: 'internal server error', error });
     }
 });
 exports.addProducts = addProducts;
+const updateProduct = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { productId } = req.params;
+    const { name, description, price, category, stockQuantity, listedBy, listedByRole, wholesalePrice, minOrderQuantity, } = req.body;
+    try {
+        const images = req.body.cloudinaryImageUrls || [];
+        const result = yield (0, productService_1.updateProductService)(productId, name, description, price, category, stockQuantity, images, listedBy, listedByRole, wholesalePrice, minOrderQuantity);
+        if (!result) {
+            res.status(400).json({ message: "failed to update product" });
+            return;
+        }
+        res.status(200).json({ message: 'product updated successfully' });
+    }
+    catch (error) {
+        console.log(error, "error");
+        res.status(500).json({ message: "internal server error" });
+    }
+});
+exports.updateProduct = updateProduct;
+const getProduct = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield (0, productService_1.getProductService)();
+        if (!result) {
+            res.status(400).json({ message: "products not found" });
+            return;
+        }
+        res.status(200).json({ message: "product fetched success fully", data: result });
+    }
+    catch (error) {
+        res.status(500).json({ message: "internal server error" });
+    }
+});
+exports.getProduct = getProduct;
+const getProductById = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { productId } = req.params;
+    try {
+        const result = yield (0, productService_1.getProductByIdService)(productId);
+        if (!result) {
+            res.status(400).json({ message: "products not found" });
+            return;
+        }
+        res.status(200).json({ message: "product fetched success fully", data: result });
+    }
+    catch (error) {
+        console.log("error", error);
+        res.status(500).json({ message: "internal server error" });
+    }
+});
+exports.getProductById = getProductById;
+const deleteProduct = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { productId } = req.params;
+    try {
+        const result = yield (0, productService_1.deleteProductService)(productId);
+        if (!result) {
+            res.status(400).json({ message: "failed to delete product" });
+            return;
+        }
+        res.status(201).json({ message: result });
+    }
+    catch (error) {
+        console.log(error, "error");
+        res.status(500).json({ message: "internal server error " });
+    }
+});
+exports.deleteProduct = deleteProduct;
