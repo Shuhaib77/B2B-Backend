@@ -29,7 +29,8 @@ const uploadImages = (req, res, next) => {
             return res.status(400).json({ message: "File upload failed", error });
         }
         if (!req.files || !(req.files instanceof Array)) {
-            return res.status(400).json({ message: "No images provided" });
+            next();
+            return;
         }
         try {
             const uploadPromises = req.files.map((file) => {

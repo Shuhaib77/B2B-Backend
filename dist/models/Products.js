@@ -69,5 +69,9 @@ const ProductSchema = new mongoose_1.Schema({
             review: { type: String, required: true },
         },
     ],
+    isDeleted: {
+        type: Boolean,
+        default: false
+    }
 }, { timestamps: true });
 exports.default = mongoose_1.default.model("Product", ProductSchema);

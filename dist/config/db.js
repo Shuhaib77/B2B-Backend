@@ -8,7 +8,6 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const connectDB = () => {
-    console.log(process.env.MONGOURL);
     const url = process.env.MONGOURL;
     if (!url) {
         throw new Error("MONGOURL is not defined in environment variables");
