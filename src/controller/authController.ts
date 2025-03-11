@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { loginService, registerService } from "../services/authService";
+import { loginService, registerService } from "../service/authService";
 
 export const register = async (req: Request, res: Response): Promise<void> => {
   const { name, email, password, role } = req.body;
