@@ -1,5 +1,5 @@
 import mongoose, { ObjectId } from "mongoose";
-import Products from "../models/Products";
+import Products, { IProduct } from "../models/Products";
 import { parseCSV } from "../utils/csvParser";
 
 
@@ -100,11 +100,29 @@ export const deleteProductService=async(productId:string)=>{
 export const importCSVService = async (filePath: string) => {
     try {
       const products = await parseCSV(filePath);
-      
+
       await Products.insertMany(products);
   
       return { success: true, message: `${products.length} products imported successfully.` };
     } catch (error) {
       throw new Error(`Error importing CSV: ${error}`);
     }
+  };
+
+
+
+  export const getLiveStock=async (productId:string):Promise<IProduct| null> =>{
+    return await Products.findById(productId)
+  }
+
+
+  export const updateStock = async (productId: string, quantity: number): Promise<IProduct | null> => {
+    const product = await Products.findById(productId);
+    if (!product) return null;
+  
+    if (product.stockQuantity < quantity) throw new Error("Insufficient stock");
+  
+    product.stockQuantity -= quantity;
+    await product.save();
+    return product;
   };

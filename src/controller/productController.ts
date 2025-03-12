@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { addProductsService, deleteProductService, getProductByIdService, getProductService, importCSVService, updateProductService } from "../service/productService";
+import { addProductsService, deleteProductService, getLiveStock, getProductByIdService, getProductService, importCSVService, updateProductService, updateStock } from "../service/productService";
+import { trycatch } from "../middeleware/tryCatch";
 
 export const addProducts=async(req:any,res:Response,next:NextFunction): Promise<void>=>{
   
@@ -115,6 +116,37 @@ export const importCSVController = async (req: Request, res: Response):Promise<v
   }
 };
 
+
+
+export const fetchStock=async (req:Request,res:Response)=>{
+
+  try {
+    const {productId}=req.params;
+    const product= await getLiveStock(productId);
+    if(!product) return res.status(404).json({message:"product not found"})
+
+      res.status(200).json({productId,stock:product.stockQuantity});
+  } catch (error) {
+    res.status(500).json({ message: "internal server error" });
+  }
+}
+
+
+export const reduceStock=async (req:Request,res:Response)=>{
+  try {
+    const {productId}=req.params;
+    const {quantity}=req.body;
+
+    if(!quantity|| quantity<0 ) return res.status(400).json({message:"invalid quantity"})
+
+      const updatedProduct=await updateStock(productId,quantity);
+      if(!updateProduct) return res.status(404).json({message:"product not found"})
+
+        res.json({message:"stock updated", stock:updatedProduct?.stockQuantity}).status(200)
+  } catch (error) {
+    res.status(500).json({ message: "internal server error"});
+  }
+}
 
 
 
