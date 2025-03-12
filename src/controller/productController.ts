@@ -1,5 +1,5 @@
-import { NextFunction, Response } from "express";
-import { addProductsService, deleteProductService, getProductByIdService, getProductService, updateProductService } from "../service/productService";
+import { NextFunction, Request, Response } from "express";
+import { addProductsService, deleteProductService, getProductByIdService, getProductService, importCSVService, updateProductService } from "../service/productService";
 
 export const addProducts=async(req:any,res:Response,next:NextFunction): Promise<void>=>{
   
@@ -99,6 +99,21 @@ export const deleteProduct=async (req:any, res:Response,next:NextFunction):Promi
     res.status(500).json({message:"internal server error "});
   }
 }
+
+
+export const importCSVController = async (req: Request, res: Response):Promise<void> => {
+  try {
+    if (!req.file) {
+      res.status(400).json({ success: false, message: "No file uploaded" });
+      return;
+    }
+
+    const result = await importCSVService(req.file.path);
+    res.status(200).json(result);
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
 
 
 

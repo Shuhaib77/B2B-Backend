@@ -1,5 +1,6 @@
 import mongoose, { ObjectId } from "mongoose";
 import Products from "../models/Products";
+import { parseCSV } from "../utils/csvParser";
 
 
 export const addProductsService=async(
@@ -93,3 +94,17 @@ export const deleteProductService=async(productId:string)=>{
 
     return "product deleted success fully";
 }
+
+
+
+export const importCSVService = async (filePath: string) => {
+    try {
+      const products = await parseCSV(filePath);
+      
+      await Products.insertMany(products);
+  
+      return { success: true, message: `${products.length} products imported successfully.` };
+    } catch (error) {
+      throw new Error(`Error importing CSV: ${error}`);
+    }
+  };
