@@ -1,13 +1,23 @@
 import { Server } from "socket.io";
 import app from "./app";
-const port =5000
 import http from 'http'
 import Products from "./models/Products";
-
+const port =5001
 
 const server=http.createServer(app)
 
-const io=new Server(server,{cors:{origin:"*"}});
+const io = new Server(server, {
+    cors: {
+      origin: "*",
+      methods: ["GET", "POST"],
+      allowedHeaders: ["Content-Type"],
+      credentials: true
+    }
+  });
+  
+server.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}`);
+});
 
 io.on("connection",(socket)=>{
     console.log("client connected");
@@ -27,6 +37,3 @@ io.on("connection",(socket)=>{
     
 })
 
-server.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-});

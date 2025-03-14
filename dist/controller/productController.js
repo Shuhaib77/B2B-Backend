@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProduct = exports.getProductById = exports.getProduct = exports.updateProduct = exports.addProducts = void 0;
+exports.reduceStock = exports.fetchStock = exports.importCSVController = exports.deleteProduct = exports.getProductById = exports.getProduct = exports.updateProduct = exports.addProducts = void 0;
 const productService_1 = require("../service/productService");
 const addProducts = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, description, price, category, stockQuantity, listedBy, listedByRole, wholesalePrice, minOrderQuantity, } = req.body;
@@ -98,3 +98,46 @@ const deleteProduct = (req, res, next) => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.deleteProduct = deleteProduct;
+const importCSVController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        if (!req.file) {
+            res.status(400).json({ success: false, message: "No file uploaded" });
+            return;
+        }
+        const result = yield (0, productService_1.importCSVService)(req.file.path);
+        res.status(200).json(result);
+    }
+    catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+exports.importCSVController = importCSVController;
+const fetchStock = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { productId } = req.params;
+        const product = yield (0, productService_1.getLiveStock)(productId);
+        if (!product)
+            return res.status(404).json({ message: "product not found" });
+        res.status(200).json({ productId, stock: product.stockQuantity });
+    }
+    catch (error) {
+        res.status(500).json({ message: "internal server error" });
+    }
+});
+exports.fetchStock = fetchStock;
+const reduceStock = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { productId } = req.params;
+        const { quantity } = req.body;
+        if (!quantity || quantity < 0)
+            return res.status(400).json({ message: "invalid quantity" });
+        const updatedProduct = yield (0, productService_1.updateStock)(productId, quantity);
+        if (!exports.updateProduct)
+            return res.status(404).json({ message: "product not found" });
+        res.json({ message: "stock updated", stock: updatedProduct === null || updatedProduct === void 0 ? void 0 : updatedProduct.stockQuantity }).status(200);
+    }
+    catch (error) {
+        res.status(500).json({ message: "internal server error" });
+    }
+});
+exports.reduceStock = reduceStock;

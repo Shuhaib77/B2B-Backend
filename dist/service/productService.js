@@ -12,9 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProductService = exports.getProductByIdService = exports.getProductService = exports.updateProductService = exports.addProductsService = void 0;
+exports.updateStock = exports.getLiveStock = exports.importCSVService = exports.deleteProductService = exports.getProductByIdService = exports.getProductService = exports.updateProductService = exports.addProductsService = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const Products_1 = __importDefault(require("../models/Products"));
+const csvParser_1 = require("../utils/csvParser");
 const addProductsService = (name, description, price, category, stockQuantity, images, listedBy, listedByRole, wholesalePrice, minOrderQuantity) => __awaiter(void 0, void 0, void 0, function* () {
     const newProduct = new Products_1.default({
         name,
@@ -90,3 +91,29 @@ const deleteProductService = (productId) => __awaiter(void 0, void 0, void 0, fu
     return "product deleted success fully";
 });
 exports.deleteProductService = deleteProductService;
+const importCSVService = (filePath) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const products = yield (0, csvParser_1.parseCSV)(filePath);
+        yield Products_1.default.insertMany(products);
+        return { success: true, message: `${products.length} products imported successfully.` };
+    }
+    catch (error) {
+        throw new Error(`Error importing CSV: ${error}`);
+    }
+});
+exports.importCSVService = importCSVService;
+const getLiveStock = (productId) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield Products_1.default.findById(productId);
+});
+exports.getLiveStock = getLiveStock;
+const updateStock = (productId, quantity) => __awaiter(void 0, void 0, void 0, function* () {
+    const product = yield Products_1.default.findById(productId);
+    if (!product)
+        return null;
+    if (product.stockQuantity < quantity)
+        throw new Error("Insufficient stock");
+    product.stockQuantity -= quantity;
+    yield product.save();
+    return product;
+});
+exports.updateStock = updateStock;
