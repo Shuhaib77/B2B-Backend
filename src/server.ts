@@ -2,7 +2,7 @@ import { Server } from "socket.io";
 import app from "./app";
 import http from 'http'
 import Products from "./models/Products";
-const port =5001
+const port =5000
 
 const server=http.createServer(app)
 
