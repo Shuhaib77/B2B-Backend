@@ -55,20 +55,20 @@ const userSchema = new mongoose_1.Schema({
         enum: ["wholesaler", "retailer", "seller"],
         required: true
     },
-    contactNumber: {
-        type: String,
-        required: true,
-    },
-    address: {
-        type: String,
-        required: true,
-    },
-    businessName: {
-        type: String,
-        required: function () {
-            return this.role !== "retailer";
-        },
-    },
+    // contactNumber:{
+    //   type:String,
+    //   required:true,
+    // },
+    // address:{
+    //   type:String,
+    //   required:true,
+    // },
+    // businessName:{
+    //   type:String,
+    //   required:function(){
+    //       return this.role!=="retailer";
+    //   },
+    // },
     stock: [
         {
             productId: { type: mongoose_1.default.Schema.Types.ObjectId, ref: "Product" },

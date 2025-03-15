@@ -25,6 +25,7 @@ if (!secret) {
 }
 const registerService = (name, email, password, role) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log(name, email, password, role, "tttttt");
         const hashPass = yield bcryptjs_1.default.hash(password, 10);
         console.log(name, hashPass, "swseses");
         if (!name || !email || !password || !role) {
@@ -47,7 +48,7 @@ const registerService = (name, email, password, role) => __awaiter(void 0, void 
         return newUser;
     }
     catch (error) {
-        console.log(error, 'error');
+        console.log(error);
         throw new Error("ded");
     }
 });

@@ -58,20 +58,20 @@ const userSchema = new Schema<IUser>({
     enum:["wholesaler", "retailer", "seller"],
     required:true
   },
-  contactNumber:{
-    type:String,
-    required:true,
-  },
-  address:{
-    type:String,
-    required:true,
-  },
-  businessName:{
-    type:String,
-    required:function(){
-        return this.role!=="retailer";
-    },
-  },
+  // contactNumber:{
+  //   type:String,
+  //   required:true,
+  // },
+  // address:{
+  //   type:String,
+  //   required:true,
+  // },
+  // businessName:{
+  //   type:String,
+  //   required:function(){
+  //       return this.role!=="retailer";
+  //   },
+  // },
 
   stock:[
     {
