@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.loginService = exports.registerService = void 0;
-const userModal_1 = __importDefault(require("../models/userModal"));
+const User_1 = __importDefault(require("../models/User"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -30,30 +30,31 @@ const registerService = (name, email, password, role) => __awaiter(void 0, void 
         if (!name || !email || !password || !role) {
             throw new Error("user alredy Existss");
         }
-        const checkUser = yield userModal_1.default.findOne({
+        const checkUser = yield User_1.default.findOne({
             email: email,
         });
         if (checkUser) {
             throw new Error("user alredy Existss");
         }
-        const newUser = yield new userModal_1.default({
+        const newUser = new User_1.default({
             name,
             email,
             password: hashPass,
             role: role,
         });
-        newUser.save();
+        yield newUser.save();
         console.log(newUser, "jjjjj");
         return newUser;
     }
     catch (error) {
+        console.log(error, 'error');
         throw new Error("ded");
     }
 });
 exports.registerService = registerService;
 //user Login
 const loginService = (email, password) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield userModal_1.default.findOne({ email: email });
+    const user = yield User_1.default.findOne({ email: email });
     if (!user) {
         throw new Error("user not finded");
     }

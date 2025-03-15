@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import { addProductsService, deleteProductService, getLiveStock, getProductByIdService, getProductService, importCSVService, updateProductService, updateStock } from "../service/productService";
+import { addProductsService, deleteProductService, getLiveStock, getProductByIdService, getProductService, importCSVService, listedByGetProductService, updateProductService, updateStock } from "../service/productService";
 import { trycatch } from "../middeleware/tryCatch";
 
 export const addProducts=async(req:any,res:Response,next:NextFunction): Promise<void>=>{
   
-    const {name,description,price,category,stockQuantity,listedBy,listedByRole,wholesalePrice,minOrderQuantity,}=req.body
+    const {listedBy}=req.params;
+    const {name,description,price,category,stockQuantity,listedByRole,wholesalePrice,minOrderQuantity,}=req.body
 
     try {
         if(!name || !description || !price || !category || !stockQuantity || !listedBy || !listedByRole){
@@ -145,6 +146,29 @@ export const reduceStock=async (req:Request,res:Response)=>{
         res.json({message:"stock updated", stock:updatedProduct?.stockQuantity}).status(200)
   } catch (error) {
     res.status(500).json({ message: "internal server error"});
+  }
+}
+
+
+export const listedByGetProduct=async(req:Request,res:Response):Promise<void>=>{
+  try {
+    const {listedBy}=req.params
+
+    if(!listedBy){
+      res.status(400).json({message:'missing required field'})
+      return 
+    }
+
+    const result=await listedByGetProductService(listedBy)
+
+    if(!result){
+      res.status(400).json({message:"failed to fetch products"})
+    }
+
+    res.status(200).json({message:'product fetched success fully',products:result})
+
+  } catch (error) {
+    res.status(500).json({message:'internal server error'})
   }
 }
 
