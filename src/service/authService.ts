@@ -14,10 +14,12 @@ export const registerService = async (
   name: string,
   email: string,
   password: string,
-  role: string
+  role: "wholesaler" | "retailer" | "seller"
 ) => {
   try {
+    console.log(name,email,password,role, "tttttt");
     const hashPass = await bcrypt.hash(password, 10);
+ 
     console.log(name, hashPass, "swseses");
     if (!name || !email || !password || !role) {
       throw new Error("user alredy Existss");
@@ -28,17 +30,19 @@ export const registerService = async (
     if (checkUser) {
       throw new Error("user alredy Existss");
     }
-    const newUser = await new User({
+    const newUser = new User({
       name,
       email,
       password: hashPass,
       role: role,
     });
-    newUser.save();
+    await newUser.save();
     console.log(newUser, "jjjjj");
 
     return newUser;
   } catch (error) {
+    console.log(error);
+    
     throw new Error("ded");
   }
 };

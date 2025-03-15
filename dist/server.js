@@ -16,7 +16,7 @@ const socket_io_1 = require("socket.io");
 const app_1 = __importDefault(require("./app"));
 const http_1 = __importDefault(require("http"));
 const Products_1 = __importDefault(require("./models/Products"));
-const port = 5001;
+const port = 5000;
 const server = http_1.default.createServer(app_1.default);
 const io = new socket_io_1.Server(server, {
     cors: {
