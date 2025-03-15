@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateStock = exports.getLiveStock = exports.importCSVService = exports.deleteProductService = exports.getProductByIdService = exports.getProductService = exports.updateProductService = exports.addProductsService = void 0;
+exports.listedByGetProductService = exports.updateStock = exports.getLiveStock = exports.importCSVService = exports.deleteProductService = exports.getProductByIdService = exports.getProductService = exports.updateProductService = exports.addProductsService = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const Products_1 = __importDefault(require("../models/Products"));
 const csvParser_1 = require("../utils/csvParser");
@@ -117,3 +117,10 @@ const updateStock = (productId, quantity) => __awaiter(void 0, void 0, void 0, f
     return product;
 });
 exports.updateStock = updateStock;
+const listedByGetProductService = (listedBy) => __awaiter(void 0, void 0, void 0, function* () {
+    const products = yield Products_1.default.find({ isDeleted: false, listedBy: listedBy });
+    if (!products)
+        throw new Error('products not found');
+    return products;
+});
+exports.listedByGetProductService = listedByGetProductService;

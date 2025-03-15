@@ -126,3 +126,13 @@ export const importCSVService = async (filePath: string) => {
     await product.save();
     return product;
   };
+
+
+  export const listedByGetProductService=async(listedBy:string)=>{
+    const products=await Products.find({isDeleted:false,listedBy:listedBy})
+
+    if(!products) throw new Error('products not found')
+
+      return products;
+      
+  }

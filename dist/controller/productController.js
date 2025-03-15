@@ -9,10 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.reduceStock = exports.fetchStock = exports.importCSVController = exports.deleteProduct = exports.getProductById = exports.getProduct = exports.updateProduct = exports.addProducts = void 0;
+exports.listedByGetProduct = exports.reduceStock = exports.fetchStock = exports.importCSVController = exports.deleteProduct = exports.getProductById = exports.getProduct = exports.updateProduct = exports.addProducts = void 0;
 const productService_1 = require("../service/productService");
 const addProducts = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, description, price, category, stockQuantity, listedBy, listedByRole, wholesalePrice, minOrderQuantity, } = req.body;
+    const { listedBy } = req.params;
+    const { name, description, price, category, stockQuantity, listedByRole, wholesalePrice, minOrderQuantity, } = req.body;
     try {
         if (!name || !description || !price || !category || !stockQuantity || !listedBy || !listedByRole) {
             res.status(403).json({ message: 'validation error on vehicle' });
@@ -141,3 +142,21 @@ const reduceStock = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.reduceStock = reduceStock;
+const listedByGetProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { listedBy } = req.params;
+        if (!listedBy) {
+            res.status(400).json({ message: 'missing required field' });
+            return;
+        }
+        const result = yield (0, productService_1.listedByGetProductService)(listedBy);
+        if (!result) {
+            res.status(400).json({ message: "failed to fetch products" });
+        }
+        res.status(200).json({ message: 'product fetched success fully', products: result });
+    }
+    catch (error) {
+        res.status(500).json({ message: 'internal server error' });
+    }
+});
+exports.listedByGetProduct = listedByGetProduct;

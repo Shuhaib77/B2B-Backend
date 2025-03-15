@@ -2,6 +2,7 @@ import User from "../models/User";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+
 dotenv.config();
 
 //user registration
@@ -41,8 +42,7 @@ export const registerService = async (
 
     return newUser;
   } catch (error) {
-    console.log(error);
-    
+    console.log(error,'error');
     throw new Error("ded");
   }
 };
