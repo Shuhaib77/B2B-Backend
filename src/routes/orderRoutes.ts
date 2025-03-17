@@ -3,4 +3,4 @@ import { orderProduct } from "../controller/orderController"
 
 const router=express.Router()
 
-router.post("place-order",orderProduct)
+router.post("/place-order",orderProduct)

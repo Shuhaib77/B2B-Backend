@@ -12,6 +12,7 @@ export interface IUser {
     stock?: IStockItem[]; 
     purchaseHistory?: IPurchaseHistoryItem[]; 
     products?: IProductItem[];
+    cart?:ObjectId[];
     isDeleted:Boolean;
     createdAt?: Date;
     updatedAt?: Date;
@@ -35,6 +36,9 @@ export interface IUser {
     price: number;
     stockQuantity: number;
   }
+
+
+  
 
 const userSchema = new Schema<IUser>({
   name:{
@@ -93,6 +97,13 @@ const userSchema = new Schema<IUser>({
         productId:{type:mongoose.Schema.Types.ObjectId,ref:"Product"},
         price:Number,
         stockQuantity:Number,
+    }
+  ],
+
+  cart:[
+    {
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"Cart",
     }
   ],
   isDeleted:{
