@@ -75,18 +75,23 @@ const userSchema = new mongoose_1.Schema({
             quantity: Number,
         }
     ],
-    purchaseHistory: [
+    orders: [
         {
-            productId: { type: mongoose_1.default.Schema.Types.ObjectId, ref: "Product" },
-            quantity: Number,
-            purchaseDate: { type: Date, default: Date.now },
+            type: mongoose_1.default.Schema.Types.ObjectId,
+            ref: "Order"
         }
     ],
-    products: [
+    // products:[
+    //   {
+    //       productId:{type:mongoose.Schema.Types.ObjectId,ref:"Product"},
+    //       price:Number,
+    //       stockQuantity:Number,
+    //   }
+    // ],
+    cart: [
         {
-            productId: { type: mongoose_1.default.Schema.Types.ObjectId, ref: "Product" },
-            price: Number,
-            stockQuantity: Number,
+            type: mongoose_1.default.Schema.Types.ObjectId,
+            ref: "Cart",
         }
     ],
     isDeleted: {
