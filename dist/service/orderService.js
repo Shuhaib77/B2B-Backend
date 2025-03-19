@@ -93,6 +93,7 @@ const verifyPaymentService = (razorpay_order_id, razorpay_payment_id, razorpay_s
     const generatedSignature = (0, crypto_1.createHmac)("sha256", process.env.RAZORPAY_KEY_SECRET)
         .update(`${razorpay_order_id}|${razorpay_payment_id}`)
         .digest("hex");
+    console.log("genaratedsignature", generatedSignature, "razorapysignature", razorpay_signature, address);
     if (generatedSignature !== razorpay_signature) {
         throw new Error("Payment verification failed");
     }
@@ -109,7 +110,7 @@ const verifyPaymentService = (razorpay_order_id, razorpay_payment_id, razorpay_s
             price: item.productId.price
         })),
         totalAmount: Number(order.amount) / 100,
-        paymentStatus: "completed",
+        paymentStatus: "Completed",
         orderStatus: "Pending",
         address: address,
         invoiceId: razorpay_order_id,

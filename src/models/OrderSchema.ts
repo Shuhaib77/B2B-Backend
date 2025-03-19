@@ -18,7 +18,6 @@ export interface IOrderAddress {
 export interface IOrder {
   _id?: ObjectId;
   buyer: Types.ObjectId; // Reference to User
-  seller: Types.ObjectId; // Reference to User
   products: IOrderProduct[];
   totalAmount: number;
   paymentStatus: "Pending" | "Completed" | "Failed" | "Refunded";
@@ -32,11 +31,6 @@ export interface IOrder {
 const orderSchema = new mongoose.Schema<IOrder>(
   {
     buyer: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User", 
-      required: true,
-    },
-    seller: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User", 
       required: true,

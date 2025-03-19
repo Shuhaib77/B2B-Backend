@@ -10,11 +10,6 @@ const orderSchema = new mongoose_1.default.Schema({
         ref: "User",
         required: true,
     },
-    seller: {
-        type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: "User",
-        required: true,
-    },
     products: [
         {
             product: {

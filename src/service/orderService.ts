@@ -102,6 +102,9 @@ export const verifyPaymentService=async(
         .update(`${razorpay_order_id}|${razorpay_payment_id}`)
         .digest("hex");
 
+        console.log("genaratedsignature",generatedSignature,"razorapysignature",razorpay_signature,address);
+        
+
         if (generatedSignature !== razorpay_signature) {
             throw new Error("Payment verification failed") 
           }
@@ -121,7 +124,7 @@ export const verifyPaymentService=async(
                 price:item.productId.price
             })),
             totalAmount:Number(order.amount) / 100,
-            paymentStatus:"completed",
+            paymentStatus:"Completed",
             orderStatus:"Pending",
             address:address,
             invoiceId:razorpay_order_id,

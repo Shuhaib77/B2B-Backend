@@ -32,6 +32,7 @@ const viewCart = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const result = yield (0, cartService_1.viewCartService)(userId);
         if (!result) {
             res.status(400).json({ message: "failed to fetch cart" });
+            return;
         }
         res.status(200).json({ message: "cart fetched successfully", cart: result });
     }
@@ -46,6 +47,7 @@ const incrementQuantity = (req, res) => __awaiter(void 0, void 0, void 0, functi
     const result = yield (0, cartService_1.incrementQuantityService)(userId, productId);
     if (!result) {
         res.status(400).json({ message: 'filed to increment quantity' });
+        return;
     }
     res.status(200).json({ message: result });
 });
@@ -55,6 +57,7 @@ const decrementQuantity = (req, res) => __awaiter(void 0, void 0, void 0, functi
     const result = yield (0, cartService_1.decrementQuantityService)(userId, productId);
     if (!result) {
         res.status(400).json({ message: 'filed to decrement quantity' });
+        return;
     }
     res.status(200).json({ message: result });
 });
@@ -65,6 +68,7 @@ const removeCart = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const result = yield (0, cartService_1.removeCartService)(userId, productId);
         if (!result) {
             res.status(400).json({ message: "filed to remove cartItem" });
+            return;
         }
         res.status(200).json({ message: result });
     }

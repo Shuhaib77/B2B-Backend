@@ -1,5 +1,6 @@
 import { Request, Response } from "express"
 import { addToCartService, decrementQuantityService, incrementQuantityService, removeCartService, viewCartService } from "../service/cartService";
+import { reduceEachTrailingCommentRange } from "typescript";
 
 
 export const addToCart=async(req:Request,res:Response)=>{
@@ -18,7 +19,7 @@ export const addToCart=async(req:Request,res:Response)=>{
  }
 }
 
-export const viewCart=async(req:Request,res:Response)=>{
+export const viewCart=async(req:Request,res:Response):Promise<void>=>{
     try {
         const {userId}=req.params;
 
@@ -26,6 +27,7 @@ export const viewCart=async(req:Request,res:Response)=>{
 
         if(!result){
             res.status(400).json({message:"failed to fetch cart"})
+            return
         }
 
         res.status(200).json({message:"cart fetched successfully",cart:result})
@@ -38,12 +40,13 @@ export const viewCart=async(req:Request,res:Response)=>{
 
 
 
-export const incrementQuantity=async (req:Request,res:Response)=>{
+export const incrementQuantity=async (req:Request,res:Response):Promise<void>=>{
  const {userId,productId}=req.params;
 
  const result=await incrementQuantityService(userId,productId);
  if(!result){
-    res.status(400).json({message:'filed to increment quantity'})
+   res.status(400).json({message:'filed to increment quantity'})
+   return
  }
 
  res.status(200).json({message:result})
@@ -56,6 +59,7 @@ export const decrementQuantity=async (req:Request,res:Response)=>{
     const result=await decrementQuantityService(userId,productId);
     if(!result){
        res.status(400).json({message:'filed to decrement quantity'})
+       return
     }
    
     res.status(200).json({message:result})
@@ -70,6 +74,7 @@ export const decrementQuantity=async (req:Request,res:Response)=>{
 
         if(!result){
             res.status(400).json({message:"filed to remove cartItem"})
+            return;
         }
 
         res.status(200).json({message:result})
