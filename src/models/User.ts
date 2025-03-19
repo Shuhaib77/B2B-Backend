@@ -10,7 +10,7 @@ export interface IUser {
     address: string;
     businessName?: string;
     stock?: IStockItem[]; 
-    purchaseHistory?: IPurchaseHistoryItem[]; 
+    orders?: ObjectId[]; 
     products?: IProductItem[];
     cart?:ObjectId[];
     isDeleted:Boolean;
@@ -25,11 +25,11 @@ export interface IUser {
   } 
 
 
-  export interface IPurchaseHistoryItem {
-    productId: ObjectId;
-    quantity: number;
-    purchaseDate: Date;
-  }
+  // export interface IPurchaseHistoryItem {
+  //   productId: ObjectId;
+  //   quantity: number;
+  //   purchaseDate: Date;
+  // }
 
   export interface IProductItem {
     productId: ObjectId;
@@ -84,21 +84,20 @@ const userSchema = new Schema<IUser>({
     }
   ],
 
-  purchaseHistory:[
-    {
-        productId:{type:mongoose.Schema.Types.ObjectId,ref:"Product"},
-        quantity:Number,
-        purchaseDate:{type:Date,default:Date.now},
-    }
+  orders:[
+   {
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"Order"
+   }
   ],
 
-  products:[
-    {
-        productId:{type:mongoose.Schema.Types.ObjectId,ref:"Product"},
-        price:Number,
-        stockQuantity:Number,
-    }
-  ],
+  // products:[
+  //   {
+  //       productId:{type:mongoose.Schema.Types.ObjectId,ref:"Product"},
+  //       price:Number,
+  //       stockQuantity:Number,
+  //   }
+  // ],
 
   cart:[
     {

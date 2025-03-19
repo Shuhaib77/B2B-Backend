@@ -1,13 +1,36 @@
-import mongoose from "mongoose";
+import mongoose, { ObjectId } from "mongoose";
+import { Types } from "mongoose";
 
-const orderSchema = new mongoose.Schema(
+export interface IOrderProduct {
+  product: Types.ObjectId; // Reference to Product
+  quantity: number;
+  price: number;
+}
+
+export interface IOrderAddress {
+  street?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  zipCode?: string;
+}
+
+export interface IOrder {
+  _id?: ObjectId;
+  buyer: Types.ObjectId; // Reference to User
+  products: IOrderProduct[];
+  totalAmount: number;
+  paymentStatus: "Pending" | "Completed" | "Failed" | "Refunded";
+  orderStatus: "Pending" | "Approved" | "Processing" | "Shipped" | "Delivered" | "Cancelled";
+  address?: IOrderAddress;
+  invoiceId?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+const orderSchema = new mongoose.Schema<IOrder>(
   {
     buyer: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User", 
-      required: true,
-    },
-    seller: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User", 
       required: true,

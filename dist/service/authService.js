@@ -48,7 +48,7 @@ const registerService = (name, email, password, role) => __awaiter(void 0, void 
         return newUser;
     }
     catch (error) {
-        console.log(error);
+        console.log(error, 'error');
         throw new Error("ded");
     }
 });
