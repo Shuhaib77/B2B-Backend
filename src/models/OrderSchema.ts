@@ -22,6 +22,7 @@ export interface IOrder {
   totalAmount: number;
   paymentStatus: "Pending" | "Completed" | "Failed" | "Refunded";
   orderStatus: "Pending" | "Approved" | "Processing" | "Shipped" | "Delivered" | "Cancelled";
+  isDelete:Boolean,
   address?: IOrderAddress;
   invoiceId?: string;
   createdAt?: Date;
@@ -85,6 +86,10 @@ const orderSchema = new mongoose.Schema<IOrder>(
       type: String, 
       unique: true,
     },
+    isDelete:{
+      type:Boolean,
+      default:false
+    }
   },
   { timestamps: true }
 );

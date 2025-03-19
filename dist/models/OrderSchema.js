@@ -60,6 +60,10 @@ const orderSchema = new mongoose_1.default.Schema({
         type: String,
         unique: true,
     },
+    isDelete: {
+        type: Boolean,
+        default: false
+    }
 }, { timestamps: true });
 const Order = mongoose_1.default.model("Order", orderSchema);
 exports.default = Order;
