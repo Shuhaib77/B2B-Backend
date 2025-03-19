@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { placeOrderService, verifyPaymentService } from "../service/orderService";
+import { getOrderByIdService, getOrderService, placeOrderService, verifyPaymentService } from "../service/orderService";
 import { IOrderAddress } from '../models/OrderSchema';
 
 
@@ -32,9 +32,38 @@ export const verifyPayment=async (req:Request,res:Response):Promise<void>=>{
       return;
     }
     res.status(200).json({message:"payment completed success fully",})
-    
+
   } catch (error) {
     console.log("error",error);
     res.status(500).json({message:'internal server error'})
   }
 }
+
+
+export const getOrders=async(req:Request,res:Response):Promise<void>=>{
+try {
+  const result=await getOrderService();
+  if(!result){
+     res.status(400).json({message:"orders not found"})
+     return
+  }
+  res.status(200).json({message:'orders fetched successfully',data:result})
+} catch (error) {
+  res.status(500).json({message:'internal server error'})
+}
+}
+
+
+export const getOrdersById=async(req:Request,res:Response):Promise<void>=>{
+  try {
+    const{userId}=req.params
+    const result=await getOrderByIdService(userId);
+    if(!result){
+      res.status(400).json({message:"orders not found"})
+      return
+    }
+    res.status(200).json({message:'orders fetched successfully',data:result})
+  } catch (error) {
+    res.status(500).json({message:'internal server error'})
+  }
+  }

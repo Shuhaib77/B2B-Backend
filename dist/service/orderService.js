@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.verifyPaymentService = exports.placeOrderService = void 0;
+exports.getOrderByIdService = exports.getOrderService = exports.verifyPaymentService = exports.placeOrderService = void 0;
 const User_1 = __importDefault(require("../models/User"));
 const OrderSchema_1 = __importDefault(require("../models/OrderSchema"));
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -24,11 +24,6 @@ const razorpay = new razorpay_1.default({
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
-// export interface orderProduct {
-//     product:ObjectId,
-//     quantity:number,
-//     price:number
-// }
 const placeOrderService = (buyerId) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const buyer = yield User_1.default.findById(buyerId)
@@ -58,34 +53,6 @@ const placeOrderService = (buyerId) => __awaiter(void 0, void 0, void 0, functio
         amount: order.amount,
         currency: order.currency,
     };
-    //     for(let item of products){
-    //         const product=await Products.findById(item.product)
-    //         if(!product){
-    //             throw new Error("product not found")
-    //         }
-    //         if(product.stockQuantity< item.quantity){
-    //             return  `Not enough stock for ${product.name}.`
-    //         }
-    //         product.stockQuantity-=item.quantity;
-    //         await product.save();
-    //         totalAmount+=item.quantity * product.price;
-    //         productDetails.push({
-    //             product:product._id,
-    //             quantity: item.quantity,
-    //             price: product.price,
-    //         });
-    //     }
-    //     const invoiceId= `INV-${uuidv4().slice(0,8)}`;
-    //     const newOrder= new Order({
-    //         buyer:buyerId,
-    //         seller:sellerId,
-    //         products:productDetails,
-    //         totalAmount,
-    //         invoiceId,
-    //         address
-    //     });
-    //     await newOrder.save()
-    //     return {newOrder,message:'order created success fully '}
 });
 exports.placeOrderService = placeOrderService;
 const verifyPaymentService = (razorpay_order_id, razorpay_payment_id, razorpay_signature, address) => __awaiter(void 0, void 0, void 0, function* () {
@@ -125,3 +92,17 @@ const verifyPaymentService = (razorpay_order_id, razorpay_payment_id, razorpay_s
     return newOrder;
 });
 exports.verifyPaymentService = verifyPaymentService;
+const getOrderService = () => __awaiter(void 0, void 0, void 0, function* () {
+    const orders = yield OrderSchema_1.default.find({ isDelete: false });
+    if (!orders)
+        throw new Error("filed to fetch orders");
+    return orders;
+});
+exports.getOrderService = getOrderService;
+const getOrderByIdService = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const orders = yield OrderSchema_1.default.findById(userId).populate({ path: 'orders' });
+    if (!orders)
+        throw new Error("filed to fetch orders");
+    return orders;
+});
+exports.getOrderByIdService = getOrderByIdService;

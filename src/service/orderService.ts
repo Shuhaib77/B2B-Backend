@@ -13,11 +13,6 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-// export interface orderProduct {
-//     product:ObjectId,
-//     quantity:number,
-//     price:number
-// }
 
 export const placeOrderService=async(buyerId:string)=>{
 
@@ -52,44 +47,6 @@ return {
     amount:order.amount,
     currency:order.currency,
 };
-
-
-
-//     for(let item of products){
-//         const product=await Products.findById(item.product)
-//         if(!product){
-//             throw new Error("product not found")
-//         }
-
-//         if(product.stockQuantity< item.quantity){
-//             return  `Not enough stock for ${product.name}.`
-//         }
-
-//         product.stockQuantity-=item.quantity;
-//         await product.save();
-
-//         totalAmount+=item.quantity * product.price;
-//         productDetails.push({
-//             product:product._id,
-//             quantity: item.quantity,
-//             price: product.price,
-//         });
-//     }
-
-//     const invoiceId= `INV-${uuidv4().slice(0,8)}`;
-
-//     const newOrder= new Order({
-//         buyer:buyerId,
-//         seller:sellerId,
-//         products:productDetails,
-//         totalAmount,
-//         invoiceId,
-//         address
-//     });
-
-//     await newOrder.save()
-
-//     return {newOrder,message:'order created success fully '}
 
  }
 
@@ -141,3 +98,26 @@ export const verifyPaymentService=async(
 
         return newOrder;
 }
+
+
+
+export const getOrderService=async()=>{
+    const orders= await Order.find({isDelete:false});
+
+    if(!orders) throw new Error("filed to fetch orders");
+
+    return orders;
+
+}
+
+
+export const getOrderByIdService=async(userId:string)=>{
+    const orders= await Order.findById(userId).populate({path:'orders'})
+
+    if(!orders) throw new Error("filed to fetch orders");
+
+    return orders;
+}
+
+
+

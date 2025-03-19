@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.verifyPayment = exports.orderProduct = void 0;
+exports.getOrdersById = exports.getOrders = exports.verifyPayment = exports.orderProduct = void 0;
 const orderService_1 = require("../service/orderService");
 const orderProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { buyerId } = req.params;
@@ -44,3 +44,32 @@ const verifyPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.verifyPayment = verifyPayment;
+const getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield (0, orderService_1.getOrderService)();
+        if (!result) {
+            res.status(400).json({ message: "orders not found" });
+            return;
+        }
+        res.status(200).json({ message: 'orders fetched successfully', data: result });
+    }
+    catch (error) {
+        res.status(500).json({ message: 'internal server error' });
+    }
+});
+exports.getOrders = getOrders;
+const getOrdersById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { userId } = req.params;
+        const result = yield (0, orderService_1.getOrderByIdService)(userId);
+        if (!result) {
+            res.status(400).json({ message: "orders not found" });
+            return;
+        }
+        res.status(200).json({ message: 'orders fetched successfully', data: result });
+    }
+    catch (error) {
+        res.status(500).json({ message: 'internal server error' });
+    }
+});
+exports.getOrdersById = getOrdersById;
